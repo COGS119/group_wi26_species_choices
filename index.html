@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Species Choices Experiment</title>
+  <script src="https://unpkg.com/jspsych@8.0.0"></script>
+  <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body></body>
+<script>
+
+  /* initialize jsPsych */
+  var jsPsych = initJsPsych({
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+});
+
+  /* create timeline */
+  var timeline = [];
+
+
+  /* start the experiment */
+  jsPsych.run(timeline);
+
+</script>
+
+</html>
