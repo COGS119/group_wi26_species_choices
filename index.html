@@ -27,6 +27,7 @@
   var stimulus_item = {
     options: ["1 dog", "Can't decide", "1 person"],
     prompt: "On one boat there is 1 dog and the other boat there is 1 person. Will you save..."
+    // any other useful info we could add here, e.g. condition info?
   }
 
 
@@ -40,6 +41,7 @@
     type: jsPsychHtmlButtonResponse,
     stimulus: '<p style="font-size:24px;">' + stimulus_item["prompt"] + '</p>',
     choices: stimulus_item["options"] //how can you improve the formatting of the buttons? (and add images?)
+    // what data do we need to store?
   };
 
   // add the trial to the timeline
