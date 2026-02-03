@@ -29,8 +29,10 @@
   var preload = {
     type: jsPsychPreload,
     images: [
-      'images/boat.png',
-      'images/cant decide.png',
+      'stimuli/boat.png',
+      'stimuli/cant decide.png',
+      'stimuli/dog.png',
+      'stimuli/person.png'
     ]
   };
     timeline.push(preload);
@@ -71,11 +73,6 @@
                 them, you can select 'Can't decide'.</p>`
   }
     timeline.push(pre_test);
-
-    console.log(test_stimuli[0].choices[0]);
-    console.log(test_stimuli[0].choices[1]);
-    console.log(test_stimuli[0].prompt);
-
 
     var test = {
         type: jsPsychHtmlButtonResponse,
