@@ -5,6 +5,7 @@
   <title>Species Choices Experiment</title>
   <script src="https://unpkg.com/jspsych@8.0.0"></script>
   <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.0"></script>
 </head>
 
 <body></body>
@@ -12,13 +13,38 @@
 
   /* initialize jsPsych */
   var jsPsych = initJsPsych({
-  on_finish: function() {
-    jsPsych.data.displayData();
-  }
-});
+    on_finish: function () {
+      jsPsych.data.displayData();
+    }
+  });
 
   /* create timeline */
   var timeline = [];
+
+  // here's an example stimulus item
+  // TO DO:  how can you expand this to reflect all items/ questions?
+  // how can you include images in the options? (check out the stimulus folder for a couple of example images)
+  var stimulus_item = {
+    options: ["1 dog", "Can't decide", "1 person"],
+    prompt: "On one boat there is 1 dog and the other boat there is 1 person. Will you save..."
+  }
+
+
+  // TO DO: add instructions
+
+  // here's an example trial
+  // TO DO: what kinds of things do you need to counterbalance or randomize?
+  // what data do you need to be sure to store?
+  // anything else you can do to make it user (or even child?) friendly
+  var trial = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: '<p style="font-size:24px;">' + stimulus_item["prompt"] + '</p>',
+    choices: stimulus_item["options"] //how can you improve the formatting of the buttons? (and add images?)
+  };
+
+  // add the trial to the timeline
+  // can you build this out into a full procedure?
+  timeline.push(trial);
 
 
   /* start the experiment */
