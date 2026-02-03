@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Moral Choices</title>
+  <title>Species Choices Experiment</title>
   <script src="https://unpkg.com/jspsych@8.0.0"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
   <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.0.0"></script>
@@ -17,8 +17,11 @@
 <script>
 
   // initialize jsPsych
-  var jsPsych = initJsPsych(
-  );
+  var jsPsych = initJsPsych({
+    on_finish: function () {
+      jsPsych.data.displayData();
+    }
+  });
 
   // create timeline
   var timeline = [];
