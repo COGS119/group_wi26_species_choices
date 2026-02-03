@@ -2,54 +2,95 @@
 <html>
 
 <head>
-  <title>Species Choices Experiment</title>
+  <title>Moral Choices</title>
   <script src="https://unpkg.com/jspsych@8.0.0"></script>
-  <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-text@2.0.0"></script>
+  <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body></body>
 <script>
 
-  /* initialize jsPsych */
-  var jsPsych = initJsPsych({
-    on_finish: function () {
-      jsPsych.data.displayData();
-    }
-  });
+  // initialize jsPsych
+  var jsPsych = initJsPsych(
+  );
 
-  /* create timeline */
+  // create timeline
   var timeline = [];
 
-  // here's an example stimulus item
-  // TO DO:  how can you expand this to reflect all items/ questions?
-  // how can you include images in the options? (check out the stimulus folder for a couple of example images)
-  var stimulus_item = {
-    options: ["1 dog", "Can't decide", "1 person"],
-    prompt: "On one boat there is 1 dog and the other boat there is 1 person. Will you save..."
-    // any other useful info we could add here, e.g. condition info?
-  }
-
-
-  // TO DO: add instructions
-
-  // here's an example trial
-  // TO DO: what kinds of things do you need to counterbalance or randomize?
-  // what data do you need to be sure to store?
-  // anything else you can do to make it user (or even child?) friendly
-  var trial = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: '<p style="font-size:24px;">' + stimulus_item["prompt"] + '</p>',
-    choices: stimulus_item["options"] //how can you improve the formatting of the buttons? (and add images?)
-    // what data do we need to store?
+  var preload = {
+    type: jsPsychPreload,
+    images: [
+      'images/boat.png',
+      'images/cant decide.png',
+    ]
   };
+    timeline.push(preload);
 
-  // add the trial to the timeline
-  // can you build this out into a full procedure?
-  timeline.push(trial);
+  // define welcome message trial
+  var welcome = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "Welcome to the experiment. Press any key to begin."
+  };
+  timeline.push(welcome);
+
+  var instruction = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus:  `<p>We are going to ask you some moral questions in which you have to make
+                choices. These questions can be hard to decide. There is no right or wrong
+                answer - you just choose whatever you personally think is right. Please
+                choose whatever you would actually choose in real life.</p>
+                <p>Press any key to begin.</p>`
+  };
+  timeline.push(instruction)
+
+  var test_stimuli = [
+  {
+    choices: ['<img src="images/person.png">', '<img src="images/cant decide.png">','<img src="images/dog.png">'],
+    prompt: ['1 person', '1 dog']
+  }
+  ];
+  
+  var pre_test = {
+    type: jsPsychImageKeyboardResponse,
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `<p>Imagine a situation involving two boats. Both of these boats are sinking. 
+                Unfortunately, no one on either of the boats is able to swim. But you can
+                choose one boat to save. Once you choose a boat, everyone on that boat will
+                be safe.</p>`,
+    choices: ['<img src="images/boat.png">', '<img src="images/cant decide.png">', '<img src="images/boat.png">'],
+    prompt: `<p>You can either save Boat A or Boat B. If it's too difficult to choose between
+                them, you can select 'Can't decide'.</p>`
+  }
+    timeline.push(pre_test);
+
+    console.log(test_stimuli[0].choices[0]);
+    console.log(test_stimuli[0].choices[1]);
+    console.log(test_stimuli[0].prompt);
 
 
-  /* start the experiment */
+    var test = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `On one boat there is ${test_stimuli[0].prompt[0]} and the other boat there is ${test_stimuli[0].prompt[1]}. Will you save...`,
+        choices: test_stimuli[0].choices,
+        prompt: `<p>You can either choose Option A or Option B. If it's too difficult to choose between
+                    them, you can select 'Can't decide'.</p>`
+    }
+
+  var test_procedure = {
+      timeline: [test],
+      timeline_variables: test_stimuli,
+      randomize_order: true, //randomize order of stimuli
+    };
+
+    timeline.push(test_procedure);
+
+  // start the experiment
   jsPsych.run(timeline);
 
 </script>
