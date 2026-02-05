@@ -107,6 +107,7 @@
   },
   ];
   
+  // Pre-test trial to introduce the boat scenario
   var pre_test = {
     type: jsPsychImageKeyboardResponse,
     type: jsPsychHtmlButtonResponse,
@@ -120,15 +121,30 @@
   }
     timeline.push(pre_test);
 
+  // go through the control stimuli
+  for (let i = 0; i < control_stimuli.length; i++) {
+    current_trial = control_stimuli[i];
+    
+    var control = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `On one boat there is ${control_stimuli[i].prompt[0]} and the other boat there is ${control_stimuli[i].prompt[1]}. Will you save...`,
+        choices: control_stimuli[i].choices,
+        prompt: `<p>You can either choose Option A or Option B. If it's too difficult to choose between
+                    them, you can select 'Can't decide'.</p>`
+    }
+    timeline.push(control);
+  }
+
+
   // iterate through test stimuli and create a trial for each one
   for (let i = 0; i < test_stimuli.length; i++) {
-
+    console.log("current trial: ", i);
     current_trial = test_stimuli[i];
 
     var test = {
         type: jsPsychHtmlButtonResponse,
-        stimulus: `On one boat there is ${test_stimuli[i].prompt[0]} and the other boat there is ${test_stimuli[i].prompt[1]}. Will you save...`,
-        choices: test_stimuli[0].choices,
+        stimulus: `On one boat there is <b>${test_stimuli[i].prompt[0]}</b> and the other boat there is <b>${test_stimuli[i].prompt[1]}</b>. Will you save...`,
+        choices: test_stimuli[i].choices,
         prompt: `<p>You can either choose Option A or Option B. If it's too difficult to choose between
                     them, you can select 'Can't decide'.</p>`
     }
