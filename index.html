@@ -26,6 +26,7 @@
   // create timeline
   var timeline = [];
 
+  // preload images
   var preload = {
     type: jsPsychPreload,
     images: [
@@ -44,6 +45,7 @@
   };
   timeline.push(welcome);
 
+  // instructions for trials
   var instruction = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus:  `<p>We are going to ask you some moral questions in which you have to make
