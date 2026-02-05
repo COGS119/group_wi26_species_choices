@@ -37,11 +37,8 @@
       'stimuli/cat.png',
       'stimuli/clam.png',
       'stimuli/dog.png',
-      'stimuli/pens.png',
       'stimuli/person.png',
       'stimuli/pig.png',
-      'stimuli/pigeon.png',
-      'stimuli/plate.png',
     ]
   };
     timeline.push(preload);
@@ -64,10 +61,49 @@
   };
   timeline.push(instruction)
 
+  var control_stimuli = [
+    {
+      choices: ['<img src="stimuli/plate.png">', '<img src="stimuli/cant decide.png">','<img src="stimuli/dog.png">'],
+      prompt: ['A plate', '1 dog']
+    },
+    {
+      choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">','<img src="stimuli/bike.png">'],
+      prompt: ['1 person', 'A bike']
+    },
+    {
+      choices: ['<img src="stimuli/plate.png">', '<img src="stimuli/cant decide.png">','<img src="stimuli/person.png">'],
+      prompt: ['A plate', '1 person']
+    }
+  ];
+  
   var test_stimuli = [
   {
     choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">','<img src="stimuli/dog.png">'],
     prompt: ['1 person', '1 dog']
+  },
+  {
+    choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">','<img src="stimuli/dog.png">'],
+    prompt: ['1 person', '2 dogs']
+  },
+  {
+    choices: ['<img src="stimuli/dog.png">', '<img src="stimuli/cant decide.png">','<img src="stimuli/person.png">'],
+    prompt: ['10 dog', '1 person']
+  },
+  {
+    choices: ['<img src="stimuli/dog.png">', '<img src="stimuli/cant decide.png">','<img src="stimuli/person.png">'],
+    prompt: ['1 dog', '2 persons']
+  },
+  {
+    choices: ['<img src="stimuli/dog.png">', '<img src="stimuli/cant decide.png">','<img src="stimuli/person.png">'],
+    prompt: ['1 dog', '10 persons']
+  },
+  {
+    choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">','<img src="stimuli/dog.png">'],
+    prompt: ['1 person', '100 dog']
+  },
+  {
+    choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">','<img src="stimuli/dog.png">'],
+    prompt: ['100 persons', '1 dog']
   }
   ];
   
@@ -84,13 +120,21 @@
   }
     timeline.push(pre_test);
 
+  // iterate through test stimuli and create a trial for each one
+  for (let i = 0; i < test_stimuli.length; i++) {
+
+    current_trial = test_stimuli[i];
+
     var test = {
         type: jsPsychHtmlButtonResponse,
-        stimulus: `On one boat there is ${test_stimuli[0].prompt[0]} and the other boat there is ${test_stimuli[0].prompt[1]}. Will you save...`,
+        stimulus: `On one boat there is ${test_stimuli[i].prompt[0]} and the other boat there is ${test_stimuli[i].prompt[1]}. Will you save...`,
         choices: test_stimuli[0].choices,
         prompt: `<p>You can either choose Option A or Option B. If it's too difficult to choose between
                     them, you can select 'Can't decide'.</p>`
     }
+
+    timeline.push(test);
+  }
 
   var test_procedure = {
       timeline: [test],
@@ -98,7 +142,7 @@
       randomize_order: true, //randomize order of stimuli
     };
 
-    timeline.push(test_procedure);
+    //timeline.push(test_procedure);
 
   // start the experiment
   jsPsych.run(timeline);
