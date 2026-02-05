@@ -128,7 +128,7 @@
     var control = {
         type: jsPsychHtmlButtonResponse,
         stimulus: `On one boat there is ${control_stimuli[i].prompt[0]} and the other boat there is ${control_stimuli[i].prompt[1]}. Will you save...`,
-        choices: control_stimuli[0].choices,
+        choices: control_stimuli[i].choices,
         prompt: `<p>You can either choose Option A or Option B. If it's too difficult to choose between
                     them, you can select 'Can't decide'.</p>`
     }
@@ -144,7 +144,7 @@
     var test = {
         type: jsPsychHtmlButtonResponse,
         stimulus: `On one boat there is <b>${test_stimuli[i].prompt[0]}</b> and the other boat there is <b>${test_stimuli[i].prompt[1]}</b>. Will you save...`,
-        choices: test_stimuli[0].choices,
+        choices: test_stimuli[i].choices,
         prompt: `<p>You can either choose Option A or Option B. If it's too difficult to choose between
                     them, you can select 'Can't decide'.</p>`
     }
