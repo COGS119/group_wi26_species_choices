@@ -13,7 +13,7 @@
   <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
 
   <style>
-    .jspsych-btn img {
+    .jspsych-btn img { /* Adjust the width and height of the images in the buttons */
       width: 180px !important;
       height: 180px !important;
       object-fit: contain !important;
@@ -46,8 +46,11 @@
       'stimuli/cat.png',
       'stimuli/clam.png',
       'stimuli/dog.png',
+      'stimuli/pens.png',
       'stimuli/person.png',
       'stimuli/pig.png',
+      'stimuli/pigeon.png',
+      'stimuli/plate.png'
     ]
   };
     timeline.push(preload);
@@ -70,6 +73,7 @@
   };
   timeline.push(instruction)
 
+  //define control trials
   var control_stimuli = [
     {
       choices: ['<img src="stimuli/plate.png">', '<img src="stimuli/cant decide.png">','<img src="stimuli/dog.png">'],
@@ -85,6 +89,7 @@
     }
   ];
   
+  // define trials
   var test_stimuli = [
   {
     choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">','<img src="stimuli/dog.png">'],
@@ -161,6 +166,7 @@
     timeline.push(test);
   }
 
+  // define test procedure with randomization
   var test_procedure = {
       timeline: [test],
       timeline_variables: test_stimuli,
