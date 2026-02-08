@@ -62,14 +62,31 @@
   };
   timeline.push(welcome);
 
-  // instructions for trials
-  var instruction = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus:  `<p>We are going to ask you some moral questions in which you have to make
+  // define conditions: "You" vs. "King Triton"
+  let conditions = [
+    {
+      name: "You",
+      instructions: `<p>We are going to ask you some moral questions in which you have to make
                 choices. These questions can be hard to decide. There is no right or wrong
                 answer - you just choose whatever you personally think is right. Please
                 choose whatever you would actually choose in real life.</p>
                 <p>Press any key to begin.</p>`
+    },
+    {
+      name: "King Triton",
+      instructions: `<p>We are going to ask you some moral questions. In these questions you are
+                asked to guess how a person called<b> Mr X </b> who always does what is
+                right would choose. In order words, you are asked to choose the option that
+                you think is the morally right choice.</p>`
+    }
+  ];
+
+  test_condition = conditions[Math.floor(Math.random() * conditions.length)];
+
+  // instructions for trials
+  var instruction = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus:  test_condition.instructions
   };
   timeline.push(instruction)
 
@@ -126,12 +143,12 @@
     type: jsPsychImageKeyboardResponse,
     type: jsPsychHtmlButtonResponse,
     stimulus: `<p>Imagine a situation involving two boats. Both of these boats are sinking. 
-                Unfortunately, no one on either of the boats is able to swim. But you can
-                choose one boat to save. Once you choose a boat, everyone on that boat will
+                Unfortunately, no one on either of the boats is able to swim. But <b>${test_condition.name}</b> can
+                choose one boat to save. Once <b>${test_condition.name}</b> choose a boat, everyone on that boat will
                 be safe.</p>`,
     choices: ['<img src="stimuli/boat.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/boat.png">'],
-    prompt: `<p>You can either save Boat A or Boat B. If it's too difficult to choose between
-                them, you can select 'Can't decide'.</p>`
+    prompt: `<p><b>${test_condition.name}</b> can either save Boat A or Boat B. If it's too difficult to choose between
+                them, <b>${test_condition.name}</b> can select 'Can't decide'.</p>`
   }
     timeline.push(pre_test);
 
@@ -141,10 +158,10 @@
     
     var control = {
         type: jsPsychHtmlButtonResponse,
-        stimulus: `On one boat there is ${control_stimuli[i].prompt[0]} and the other boat there is ${control_stimuli[i].prompt[1]}. Will you save...`,
+        stimulus: `On one boat there is ${control_stimuli[i].prompt[0]} and the other boat there is ${control_stimuli[i].prompt[1]}. Will <b>${test_condition.name}</b> save...`,
         choices: control_stimuli[i].choices,
-        prompt: `<p>You can either choose Option A or Option B. If it's too difficult to choose between
-                    them, you can select 'Can't decide'.</p>`
+        prompt: `<p><b>${test_condition.name}</b> can either choose Option A or Option B. If it's too difficult to choose between
+                    them, <b>${test_condition.name}</b> can select 'Can't decide'.</p>`
     }
     timeline.push(control);
   }
@@ -157,10 +174,11 @@
 
     var test = {
         type: jsPsychHtmlButtonResponse,
-        stimulus: `On one boat there is <b>${test_stimuli[i].prompt[0]}</b> and the other boat there is <b>${test_stimuli[i].prompt[1]}</b>. Will you save...`,
+        stimulus: `On one boat there is <b>${test_stimuli[i].prompt[0]}</b> and the other boat there is <b>${test_stimuli[i].prompt[1]}</b>.
+                 Will <b>${test_condition.name}</b> save...`,
         choices: test_stimuli[i].choices,
-        prompt: `<p>You can either choose Option A or Option B. If it's too difficult to choose between
-                    them, you can select 'Can't decide'.</p>`
+        prompt: `<p><b>${test_condition.name}</b> can either choose Option A or Option B. If it's too difficult to choose between
+                    them, <b>${test_condition.name}</b> can select 'Can't decide'.</p>`
     }
 
     timeline.push(test);
