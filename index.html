@@ -160,6 +160,7 @@
         type: jsPsychHtmlButtonResponse,
         stimulus: `On one boat there is ${control_stimuli[i].prompt[0]} and the other boat there is ${control_stimuli[i].prompt[1]}. Will <b>${test_condition.name}</b> save...`,
         choices: control_stimuli[i].choices,
+        randomize_order: true,
         prompt: `<p><b>${test_condition.name}</b> can either choose Option A or Option B. If it's too difficult to choose between
                     them, <b>${test_condition.name}</b> can select 'Can't decide'.</p>`
     }
@@ -177,6 +178,7 @@
         stimulus: `On one boat there is <b>${test_stimuli[i].prompt[0]}</b> and the other boat there is <b>${test_stimuli[i].prompt[1]}</b>.
                  Will <b>${test_condition.name}</b> save...`,
         choices: test_stimuli[i].choices,
+        randomize_order: true,
         prompt: `<p><b>${test_condition.name}</b> can either choose Option A or Option B. If it's too difficult to choose between
                     them, <b>${test_condition.name}</b> can select 'Can't decide'.</p>`
     }
