@@ -263,6 +263,33 @@
 
   timeline.push(technical_check);
 
+  var debrief = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+      <h2>Debrief</h2>
+      <p>
+        Thank you for participating in this study.
+      </p>
+      <p>
+        This experiment examined how people make moral decisions when choosing 
+        between humans and animals. We are interested in how different age groups 
+        and conditions influence these decisions.
+      </p>
+      <p>
+        You were not told the specific research question beforehand in order to 
+        avoid influencing your responses.
+      </p>
+      <p>
+        There were no right or wrong answers — we were interested in your 
+        personal judgments.
+      </p>`,
+    choices: ["Finish"],
+    data: { task: "debrief" }
+  };
+
+  timeline.push(debrief);
+
+
   // define test procedure with randomization
   var test_procedure = {
     timeline: [test],
