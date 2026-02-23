@@ -197,6 +197,15 @@
     }
 
     timeline.push(test);
+
+  var iti = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<div style="font-size:40px; opacity:0.6;">+</div>',
+    choices: "NO_KEYS",
+    trial_duration: 500,
+    data: { task: "iti" }
+  };    
+  timeline.push(iti);
   }
 
   var hypothesis_check = {
