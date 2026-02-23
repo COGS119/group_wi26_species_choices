@@ -10,6 +10,7 @@
   <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.0"></script>
   <script src="https://unpkg.com/@jspsych/plugin-survey-likert@2.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@2.0.0"></script>
   <script src="https://unpkg.com/@jspsych/plugin-survey-text@2.0.0"></script>
   <!-- This is for data storage - please be sure to keep this script in all future updates to the code!! -->
   <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
@@ -249,6 +250,45 @@
   };
 
   timeline.push(technical_check);
+
+  var demographics = {
+    type: jsPsychSurveyMultiChoice,
+    questions: [
+      {
+        prompt: "What is your age range?",
+        name: "age_bracket",
+        options: ["Under 18", "18 to 24", "25 to 34", "35 to 44", "45 to 54", "55 to 64", "65+"],
+        required: true
+      },
+      {
+        prompt: "Gender (optional):",
+        name: "gender",
+        options: ["Woman", "Man", "Non-binary", "Prefer to self-describe", "Prefer not to say"],
+        required: false
+      },
+      {
+        prompt: "English proficiency:",
+        name: "english_proficiency",
+        options: ["Not fluent", "Somewhat fluent", "Fluent", "Native / near-native"],
+        required: true
+      },
+      {
+        prompt: "Do you currently have a pet?",
+        name: "pet_ownership",
+        options: ["Yes", "No"],
+        required: true
+      },
+      {
+        prompt: "Diet (optional):",
+        name: "diet",
+        options: ["Omnivore", "Vegetarian", "Vegan", "Other", "Prefer not to say"],
+        required: false
+      }
+    ],
+    preamble: "<p>Please answer a few quick questions.</p>",
+    data: { task: "demographics" }
+  };
+  timeline.push(demographics);
 
   var debrief = {
     type: jsPsychHtmlButtonResponse,
