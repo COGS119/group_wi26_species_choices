@@ -88,13 +88,6 @@
                 answer - you just choose whatever you personally think is right. Please
                 choose whatever you would actually choose in real life.</p>
                 <p>Press any key to begin.</p>`
-    },
-    {
-      name: "King Triton",
-      instructions: `<p>We are going to ask you some moral questions. In these questions you are
-                asked to guess how a person called<b> Mr X </b> who always does what is
-                right would choose. In order words, you are asked to choose the option that
-                you think is the morally right choice.</p>`
     }
   ];
 
@@ -106,22 +99,6 @@
     stimulus: test_condition.instructions
   };
   timeline.push(instruction)
-
-  //define control trials
-  var control_stimuli = [
-    {
-      choices: ['<img src="stimuli/plate.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/dog.png">'],
-      prompt: ['A plate', '1 dog']
-    },
-    {
-      choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/bike.png">'],
-      prompt: ['1 person', 'A bike']
-    },
-    {
-      choices: ['<img src="stimuli/plate.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/person.png">'],
-      prompt: ['A plate', '1 person']
-    }
-  ];
 
   // define trials
   var test_stimuli = [
@@ -153,36 +130,35 @@
       choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/dog.png">'],
       prompt: ['100 people', '10 dog']
     },
+    {
+      choices: ['<img src="stimuli/plate.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/dog.png">'],
+      prompt: ['A plate', '1 dog']
+    },
+    {
+      choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/bike.png">'],
+      prompt: ['1 person', 'A bike']
+    },
+    {
+      choices: ['<img src="stimuli/plate.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/person.png">'],
+      prompt: ['A plate', '1 person']
+    }
   ];
+
+  //randomize order of test stimuli
+  test_stimuli = jsPsych.randomization.shuffle(test_stimuli);
 
   // Pre-test trial to introduce the boat scenario
   var pre_test = {
-    type: jsPsychImageKeyboardResponse,
     type: jsPsychHtmlButtonResponse,
     stimulus: `<p>Imagine a situation involving two boats. Both of these boats are sinking. 
-                Unfortunately, no one on either of the boats is able to swim. But <b>${test_condition.name}</b> can
-                choose one boat to save. Once <b>${test_condition.name}</b> choose a boat, everyone on that boat will
+                Unfortunately, no one on either of the boats is able to swim. But ${test_condition.name} can
+                choose one boat to save. Once ${test_condition.name} choose a boat, everyone on that boat will
                 be safe.</p>`,
     choices: ['<img src="stimuli/boat.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/boat.png">'],
-    prompt: `<p><b>${test_condition.name}</b> can either save Boat A or Boat B. If it's too difficult to choose between
-                them, <b>${test_condition.name}</b> can select 'Can't decide'.</p>`
+    prompt: `<p>${test_condition.name} can either save the left boat or right boat. If it's too difficult to choose between
+                them, ${test_condition.name} can select 'Can't decide'.</p>`
   }
   timeline.push(pre_test);
-
-  // go through the control stimuli
-  for (let i = 0; i < control_stimuli.length; i++) {
-    current_trial = control_stimuli[i];
-
-    var control = {
-        type: jsPsychHtmlButtonResponse,
-        stimulus: `On one boat there is ${control_stimuli[i].prompt[0]} and the other boat there is ${control_stimuli[i].prompt[1]}. Will <b>${test_condition.name}</b> save...`,
-        choices: control_stimuli[i].choices,
-        prompt: `<p><b>${test_condition.name}</b> can either choose Option A or Option B. If it's too difficult to choose between
-                    them, <b>${test_condition.name}</b> can select 'Can't decide'.</p>`
-    }
-    timeline.push(control);
-  }
-
 
   // iterate through test stimuli and create a trial for each one
   for (let i = 0; i < test_stimuli.length; i++) {
@@ -203,15 +179,17 @@
       type: jsPsychHtmlButtonResponse,
       stimulus: `On one boat there is <b>${test_stimuli[i].prompt[0]}</b> and the other boat there is <b>${test_stimuli[i].prompt[1]}</b>.
                  Will <b>${test_condition.name}</b> save...`,
-        choices: [leftChoice, cantDecide, rightChoice],
-        prompt: `<p><b>${test_condition.name}</b> can either choose Option A or Option B. If it's too difficult to choose between
-                    them, <b>${test_condition.name}</b> can select 'Can't decide'.</p>`,
+        choices: [leftChoice, '<img src="stimuli/cant decide.png">', rightChoice],
+        prompt: `<p>${test_condition.name} can either choose the <b>left</b> boat or the <b>right</b> boat. If it's too difficult to choose between
+                    them, ${test_condition.name} can select 'Can't decide'.</p>`,
 
       data: {
+      const: t = jsPsych.getCurrentTrial(),
       trial_index: i,
       swap: swap,
       left_is: swap ? "B" : "A",
       right_is: swap ? "A" : "B",
+      choice_options: test_stimuli[i].prompt,
       // Optional: store labels so you can decode responses later
       optionA_label: current_trial.prompt[0],
       optionB_label: current_trial.prompt[1],
@@ -280,7 +258,7 @@
         avoid influencing your responses.
       </p>
       <p>
-        There were no right or wrong answers — we were interested in your 
+        There were no right or wrong answers, we were interested in your 
         personal judgments.
       </p>`,
     choices: ["Finish"],
