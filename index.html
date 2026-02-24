@@ -52,10 +52,10 @@
   const filename = `${file_id}.csv`;
   //also store the random id for convenience
   // also store participant-level info on EVERY row
+  
 jsPsych.data.addProperties({
-  random_id: random_id,                 // keep your existing id
-  participant_id: random_id,            // same thing, clearer name
-  condition_name: test_condition.name   // "You" (and later whatever else you add)
+  random_id: random_id,
+  participant_id: random_id
 });
   //PLEASE KEEP FOR ALL FUTURE ITERATIONS
 
@@ -111,6 +111,11 @@ jsPsych.data.addProperties({
   ];
 
   test_condition = conditions[Math.floor(Math.random() * conditions.length)];
+
+  // add condition info after test_condition is defined
+jsPsych.data.addProperties({
+  condition_name: test_condition.name
+});
 
   // instructions for trials
   var instruction = {
