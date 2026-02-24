@@ -165,15 +165,24 @@
 
   // Pre-test trial to introduce the boat scenario
   var pre_test = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: `<p>Imagine a situation involving two boats. Both of these boats are sinking. 
-                Unfortunately, no one on either of the boats is able to swim. But ${test_condition.name} can
-                choose one boat to save. Once ${test_condition.name} choose a boat, everyone on that boat will
-                be safe.</p>`,
-    choices: ['<img src="stimuli/boat.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/boat.png">'],
-    prompt: `<p>${test_condition.name} can either save the left boat or right boat. If it's too difficult to choose between
-                them, ${test_condition.name} can select 'Can't decide'.</p>`
-  }
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `
+      <p>
+        Imagine a situation involving two boats. Both of these boats are sinking.
+        Unfortunately, no one on either of the boats is able to swim. But ${test_condition.name} can
+        choose one boat to save. Once ${test_condition.name} chooses a boat, everyone on that boat will
+        be safe.
+      </p>
+
+      <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin-top: 30px;">
+        <img src="stimuli/boat.png" style="width:150px;">
+        <img src="stimuli/cant decide.png" style="width:150px;">
+        <img src="stimuli/boat.png" style="width:150px;">
+      </div>
+    `,
+    choices: "ALL_KEYS",
+    prompt: `<p>This is an illustration of the structure of the experiment. Press any key to begin.</p>`
+  };
   timeline.push(pre_test);
 
   // iterate through test stimuli and create a trial for each one
@@ -278,7 +287,7 @@
       {
         prompt: "Gender (optional):",
         name: "gender",
-        options: ["Woman", "Man", "Non-binary", "Prefer to self-describe", "Prefer not to say"],
+        options: ["Female", "Male", "Non-binary", "Prefer to self-describe", "Prefer not to say"],
         required: false
       },
       {
@@ -352,6 +361,14 @@
   };
   timeline.push(save_data);
   //PLEASE KEEP FOR ALL FUTURE ITERATIONS
+
+  var exit_fullscreen = {
+    type: jsPsychFullscreen,
+    fullscreen_mode: false,
+    delay_after: 0
+  };
+
+  timeline.push(exit_fullscreen);
 
   // start the experiment
   jsPsych.run(timeline);
