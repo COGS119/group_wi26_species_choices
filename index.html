@@ -51,9 +51,12 @@
   var file_id = random_id + "_" + date.getTime().toString();
   const filename = `${file_id}.csv`;
   //also store the random id for convenience
-  jsPsych.data.addProperties({
-    random_id: random_id,
-  });
+  // also store participant-level info on EVERY row
+jsPsych.data.addProperties({
+  random_id: random_id,                 // keep your existing id
+  participant_id: random_id,            // same thing, clearer name
+  condition_name: test_condition.name   // "You" (and later whatever else you add)
+});
   //PLEASE KEEP FOR ALL FUTURE ITERATIONS
 
   // preload images
