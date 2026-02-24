@@ -124,51 +124,79 @@ jsPsych.data.addProperties({
   timeline.push(instruction)
 
   // define trials
-  var test_stimuli = [
-    {
-      choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/dog.png">'],
-      prompt: ['1 person', '1 dog']
-    },
-    {
-      choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/dog.png">'],
-      prompt: ['1 person', '10 dogs']
-    },
-    {
-      choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/dog.png">'],
-      prompt: ['1 person', '100 dogs']
-    },
-    {
-      choices: ['<img src="stimuli/dog.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/person.png">'],
-      prompt: ['1 dog', '10 people']
-    },
-    {
-      choices: ['<img src="stimuli/dog.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/person.png">'],
-      prompt: ['100 dog', '10 people']
-    },
-    {
-      choices: ['<img src="stimuli/dog.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/person.png">'],
-      prompt: ['1 dog', '100 people']
-    },
-    {
-      choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/dog.png">'],
-      prompt: ['100 people', '10 dog']
-    },
-    {
-      choices: ['<img src="stimuli/plate.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/dog.png">'],
-      prompt: ['A plate', '1 dog']
-    },
-    {
-      choices: ['<img src="stimuli/person.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/bike.png">'],
-      prompt: ['1 person', 'A bike']
-    },
-    {
-      choices: ['<img src="stimuli/plate.png">', '<img src="stimuli/cant decide.png">', '<img src="stimuli/person.png">'],
-      prompt: ['A plate', '1 person']
-    }
-  ];
+  const species_list = [
+  { key: "dog",    singular: "dog",    plural: "dogs",    img1: "stimuli/dog.png" },
+  { key: "pig",    singular: "pig",    plural: "pigs",    img1: "stimuli/pig.png" },
+  { key: "cat",    singular: "cat",    plural: "cats",    img1: "stimuli/cat.png" },
+  { key: "bunny",  singular: "bunny",  plural: "bunnies", img1: "stimuli/bunny.png" },
+  { key: "clam",   singular: "clam",   plural: "clams",   img1: "stimuli/clam.png" },
+  { key: "pigeon", singular: "pigeon", plural: "pigeons", img1: "stimuli/pigeon.png" },
+];
 
-  //randomize order of test stimuli
-  test_stimuli = jsPsych.randomization.shuffle(test_stimuli);
+// Human image (single for now)
+const human_img1 = "stimuli/person.png";
+
+// Helper to make labels like "1 person" vs "10 people"
+function humanLabel(n) {
+  if (n === 1) return "1 person";
+  return `${n} people`;
+}
+
+// Helper to make labels like "1 dog" vs "10 dogs"
+function speciesLabel(n, sp) {
+  if (n === 1) return `1 ${sp.singular}`;
+  return `${n} ${sp.plural}`;
+}
+
+// The 7 required comparison types (human_count, species_count)
+const trial_pairs = [
+  [1,   1],
+  [1,  10],
+  [1, 100],
+  [10,  1],
+  [10,100],
+  [100, 1],
+  [100,10],
+];
+
+// Build the actual jsPsych stimuli list
+var test_stimuli = [];
+
+for (const sp of species_list) {
+  for (const [hN, sN] of trial_pairs) {
+
+    // For now: use the single image even for 10/100 (you’ll update later)
+    const human_img = human_img1;
+    const species_img = sp.img1;
+
+    test_stimuli.push({
+      // keep your 3-button structure: left option, can't decide, right option
+      // NOTE: your main loop grabs choices[0] as A and choices[2] as B
+      choices: [
+        `<img src="${human_img}">`,
+        `<img src="stimuli/cant decide.png">`,
+        `<img src="${species_img}">`
+      ],
+
+      // prompt[0] is "A label" (human), prompt[1] is "B label" (species)
+      prompt: [
+        humanLabel(hN),
+        speciesLabel(sN, sp)
+      ],
+
+      // extra fields (optional but very useful for analysis + debugging)
+      meta: {
+        species_key: sp.key,
+        human_n: hN,
+        species_n: sN
+      }
+    });
+  }
+}
+
+// Randomize order across participants (keep this)
+test_stimuli = jsPsych.randomization.shuffle(test_stimuli);
+
 
   // Pre-test trial to introduce the boat scenario
   var pre_test = {
@@ -221,6 +249,10 @@ jsPsych.data.addProperties({
   // which trial in the loop
   trial_number: i,
 
+  species_key: current_trial.meta.species_key,
+  human_n: current_trial.meta.human_n,
+  species_n: current_trial.meta.species_n,
+
   // the two scenario labels (this is your "trial type" info)
   optionA_label: current_trial.prompt[0],
   optionB_label: current_trial.prompt[1],
@@ -262,9 +294,19 @@ on_finish: function(data) {
   if (chosen.includes("person") || chosen.includes("people")) {
     data.choice_kind = "human";
     data.saved_human = 1;
-  } else if (chosen.includes("dog")) {
+
+  } else if (
+    chosen.includes("dog") ||
+    chosen.includes("pig") ||
+    chosen.includes("cat") ||
+    chosen.includes("bunny") ||
+    chosen.includes("bunnies") ||
+    chosen.includes("clam") ||
+    chosen.includes("pigeon")
+  ) {
     data.choice_kind = "animal";
     data.saved_animal = 1;
+
   } else if (chosen.includes("bike") || chosen.includes("plate")) {
     data.choice_kind = "object";
   }
@@ -390,15 +432,6 @@ on_finish: function(data) {
 
   timeline.push(debrief);
 
-
-  // define test procedure with randomization
-  var test_procedure = {
-    timeline: [test],
-    timeline_variables: test_stimuli,
-    randomize_order: true, //randomize order of stimuli
-  };
-
-  //timeline.push(test_procedure);
 
   //PLEASE KEEP FOR ALL FUTURE ITERATIONS
   //this portion of the code ensures that the data gets sent to be stored on OSF
