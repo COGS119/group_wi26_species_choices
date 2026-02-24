@@ -158,7 +158,19 @@ const trial_pairs = [
   [100, 1],
   [100,10],
 ];
+  
+function makeImageGrid(imgSrc, count) {
+  let size = 60;
+  if (count >= 10) size = 40;
+  if (count >= 100) size = 25;
 
+  let images = "";
+  for (let i = 0; i < count; i++) {
+    images += `<img src="${imgSrc}" style="width:${size}px;height:${size}px;margin:1px;">`;
+  }
+
+  return `<div style="display:flex;flex-wrap:wrap;justify-content:center;max-width:250px;">${images}</div>`;
+}
 // Build the actual jsPsych stimuli list
 var test_stimuli = [];
 
@@ -166,8 +178,8 @@ for (const sp of species_list) {
   for (const [hN, sN] of trial_pairs) {
 
     // For now: use the single image even for 10/100 (you’ll update later)
-    const human_img = human_img1;
-    const species_img = sp.img1;
+    const human_img = makeImageGrid(human_img1, hN);
+    const species_img = makeImageGrid(sp.img1, sN);
 
     test_stimuli.push({
       // keep your 3-button structure: left option, can't decide, right option
