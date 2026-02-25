@@ -270,7 +270,7 @@ test_stimuli = jsPsych.randomization.shuffle(test_stimuli);
       stimulus: `On one boat there is <b>${test_stimuli[i].prompt[0]}</b> and the other boat there is <b>${test_stimuli[i].prompt[1]}</b>.
                  Will <b>${test_condition.name}</b> save...`,
         choices: [leftChoice, '<img src="stimuli/cant decide.png">', rightChoice],
-        prompt: `<p>${test_condition.name} can either choose the <b>left</b> boat or the <b>right</b> boat. If it's too difficult to choose between
+        prompt: `<p>${test_condition.name} can either save the <b>left</b> boat or the <b>right</b> boat. If it's too difficult to choose between
                     them, ${test_condition.name} can select 'Can't decide'.</p>`,
 
       data: {
@@ -494,7 +494,7 @@ timeline.push(capacity_emotion);
         avoid influencing your responses.
       </p>
       <p>
-        There were no right or wrong answers, we were interested in your 
+        There were no right or wrong answers. We were interested in your 
         personal judgments.
       </p>`,
     choices: ["Finish"],
