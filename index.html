@@ -355,6 +355,47 @@ on_finish: function(data) {
   timeline.push(iti);
   }
 
+  const capacity_labels = ["Not at all", "A little bit", "A medium amount", "A lot"];
+
+// 1) Smartness
+var capacity_smart = {
+  type: jsPsychSurveyLikert,
+  preamble: "<p><b>Capacities</b></p><p>How smart do you think the following types of beings are?</p>",
+  questions: [
+    { prompt: "Person", labels: capacity_labels, required: true, name: "smart_person" },
+    { prompt: "Dog",    labels: capacity_labels, required: true, name: "smart_dog" },
+    { prompt: "Pig",    labels: capacity_labels, required: true, name: "smart_pig" }
+  ],
+  data: { task: "capacity_smart" }
+};
+timeline.push(capacity_smart);
+
+// 2) Physical pain
+var capacity_pain = {
+  type: jsPsychSurveyLikert,
+  preamble: "<p>To what extent do you think the following types of beings can feel <b>physical pain</b>?</p>",
+  questions: [
+    { prompt: "Person", labels: capacity_labels, required: true, name: "pain_person" },
+    { prompt: "Dog",    labels: capacity_labels, required: true, name: "pain_dog" },
+    { prompt: "Pig",    labels: capacity_labels, required: true, name: "pain_pig" }
+  ],
+  data: { task: "capacity_pain" }
+};
+timeline.push(capacity_pain);
+
+// 3) Sadness/anxiety
+var capacity_emotion = {
+  type: jsPsychSurveyLikert,
+  preamble: "<p>To what extent do you think the following types of beings can feel <b>sadness or anxiety</b>?</p>",
+  questions: [
+    { prompt: "Person", labels: capacity_labels, required: true, name: "emotion_person" },
+    { prompt: "Dog",    labels: capacity_labels, required: true, name: "emotion_dog" },
+    { prompt: "Pig",    labels: capacity_labels, required: true, name: "emotion_pig" }
+  ],
+  data: { task: "capacity_emotion" }
+};
+timeline.push(capacity_emotion);
+
   var hypothesis_check = {
     type: jsPsychSurveyText,
     questions: [
@@ -460,9 +501,6 @@ on_finish: function(data) {
     data: { task: "debrief" }
   };
 
-  timeline.push(debrief);
-
-
   //PLEASE KEEP FOR ALL FUTURE ITERATIONS
   //this portion of the code ensures that the data gets sent to be stored on OSF
   const save_data = {
@@ -473,7 +511,7 @@ on_finish: function(data) {
     data_string: () => jsPsych.data.get().csv()
   };
   timeline.push(save_data);
-  //PLEASE KEEP FOR ALL FUTURE ITERATIONS
+  timeline.push(debrief);
 
   var exit_fullscreen = {
     type: jsPsychFullscreen,
