@@ -64,17 +64,35 @@ jsPsych.data.addProperties({
     type: jsPsychPreload,
     images: [
       'stimuli/bike.png',
-      'stimuli/boat.png',
-      'stimuli/bunny.png',
-      'stimuli/cant decide.png',
-      'stimuli/cat.png',
-      'stimuli/clam.png',
-      'stimuli/dog.png',
-      'stimuli/pens.png',
-      'stimuli/person.png',
-      'stimuli/pig.png',
-      'stimuli/pigeon.png',
-      'stimuli/plate.png'
+  'stimuli/boat.png',
+  'stimuli/cant decide.png',
+  'stimuli/pens.png',
+  'stimuli/person.png',
+  'stimuli/plate.png',
+
+  // 1x animals
+  'stimuli/bunny.png',
+  'stimuli/cat.png',
+  'stimuli/clam.png',
+  'stimuli/dog.png',
+  'stimuli/pig.png',
+  'stimuli/pigeon.png',
+
+  // 10x animals
+  'stimuli/bunny_10.png',
+  'stimuli/cat_10.png',
+  'stimuli/clam_10.png',
+  'stimuli/dog_10.png',
+  'stimuli/pig_10.png',
+  'stimuli/pigeon_10.png',
+
+  // 100x animals
+  'stimuli/bunny_100.png',
+  'stimuli/cat_100.png',
+  'stimuli/clam_100.png',
+  'stimuli/dog_100.png',
+  'stimuli/pig_100.png',
+  'stimuli/pigeon_100.png',
     ]
   };
   timeline.push(preload);
@@ -125,13 +143,20 @@ jsPsych.data.addProperties({
 
   // define trials
   const species_list = [
-  { key: "dog",    singular: "dog",    plural: "dogs",    img1: "stimuli/dog.png" },
-  { key: "pig",    singular: "pig",    plural: "pigs",    img1: "stimuli/pig.png" },
-  { key: "cat",    singular: "cat",    plural: "cats",    img1: "stimuli/cat.png" },
-  { key: "bunny",  singular: "bunny",  plural: "bunnies", img1: "stimuli/bunny.png" },
-  { key: "clam",   singular: "clam",   plural: "clams",   img1: "stimuli/clam.png" },
-  { key: "pigeon", singular: "pigeon", plural: "pigeons", img1: "stimuli/pigeon.png" },
+  { key: "dog",    singular: "dog",    plural: "dogs",    img1: "stimuli/dog.png",    img10: "stimuli/dog_10.png",    img100: "stimuli/dog_100.png" },
+  { key: "pig",    singular: "pig",    plural: "pigs",    img1: "stimuli/pig.png",    img10: "stimuli/pig_10.png",    img100: "stimuli/pig_100.png" },
+  { key: "cat",    singular: "cat",    plural: "cats",    img1: "stimuli/cat.png",    img10: "stimuli/cat_10.png",    img100: "stimuli/cat_100.png" },
+  { key: "bunny",  singular: "bunny",  plural: "bunnies", img1: "stimuli/bunny.png",  img10: "stimuli/bunny_10.png",  img100: "stimuli/bunny_100.png" },
+  { key: "clam",   singular: "clam",   plural: "clams",   img1: "stimuli/clam.png",   img10: "stimuli/clam_10.png",   img100: "stimuli/clam_100.png" },
+  { key: "pigeon", singular: "pigeon", plural: "pigeons", img1: "stimuli/pigeon.png", img10: "stimuli/pigeon_10.png", img100: "stimuli/pigeon_100.png" },
 ];
+
+function speciesImgForCount(sp, n) {
+  if (n === 1) return sp.img1;
+  if (n === 10) return sp.img10;
+  if (n === 100) return sp.img100;
+  return sp.img1; // fallback safety
+}
 
 // Human image (single for now)
 const human_img1 = "stimuli/person.png";
@@ -159,44 +184,29 @@ const trial_pairs = [
   [100,10],
 ];
   
-function makeImageGrid(imgSrc, count) {
-  let size = 60;
-  if (count >= 10) size = 40;
-  if (count >= 100) size = 25;
-
-  let images = "";
-  for (let i = 0; i < count; i++) {
-    images += `<img src="${imgSrc}" style="width:${size}px;height:${size}px;margin:1px;">`;
-  }
-
-  return `<div style="display:flex;flex-wrap:wrap;justify-content:center;max-width:250px;">${images}</div>`;
-}
 // Build the actual jsPsych stimuli list
 var test_stimuli = [];
 
 for (const sp of species_list) {
   for (const [hN, sN] of trial_pairs) {
 
-    // For now: use the single image even for 10/100 (you’ll update later)
-    const human_img = makeImageGrid(human_img1, hN);
-    const species_img = makeImageGrid(sp.img1, sN);
+    // humans: you said you don't have person_10/person_100 yet
+    // so for now use the same person image for all human counts
+    const human_img = human_img1;
+
+    // animals: use the new *_10 and *_100 images
+    const species_img = speciesImgForCount(sp, sN);
 
     test_stimuli.push({
-      // keep your 3-button structure: left option, can't decide, right option
-      // NOTE: your main loop grabs choices[0] as A and choices[2] as B
       choices: [
         `<img src="${human_img}">`,
         `<img src="stimuli/cant decide.png">`,
         `<img src="${species_img}">`
       ],
-
-      // prompt[0] is "A label" (human), prompt[1] is "B label" (species)
       prompt: [
         humanLabel(hN),
         speciesLabel(sN, sp)
       ],
-
-      // extra fields (optional but very useful for analysis + debugging)
       meta: {
         species_key: sp.key,
         human_n: hN,
@@ -206,7 +216,6 @@ for (const sp of species_list) {
   }
 }
 
-// Randomize order across participants (keep this)
 test_stimuli = jsPsych.randomization.shuffle(test_stimuli);
 
 
