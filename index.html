@@ -85,6 +85,7 @@ jsPsych.data.addProperties({
   'stimuli/dog_10.png',
   'stimuli/pig_10.png',
   'stimuli/pigeon_10.png',
+  'stimuli/person_10.png',
 
   // 100x animals
   'stimuli/bunny_100.png',
@@ -93,6 +94,7 @@ jsPsych.data.addProperties({
   'stimuli/dog_100.png',
   'stimuli/pig_100.png',
   'stimuli/pigeon_100.png',
+  'stimuli/person_100.png',
     ]
   };
   timeline.push(preload);
@@ -158,8 +160,17 @@ function speciesImgForCount(sp, n) {
   return sp.img1; // fallback safety
 }
 
-// Human image (single for now)
+// Human image
 const human_img1 = "stimuli/person.png";
+const human_img10 = "stimuli/person_10.png";
+const human_img100 = "stimuli/person_100.png";
+  
+function humanImgForCount(n) {
+  if (n === 1) return human_img1;
+  if (n === 10) return human_img10;
+  if (n === 100) return human_img100;
+  return human_img1; // fallback
+}
 
 // Helper to make labels like "1 person" vs "10 people"
 function humanLabel(n) {
@@ -190,9 +201,7 @@ var test_stimuli = [];
 for (const sp of species_list) {
   for (const [hN, sN] of trial_pairs) {
 
-    // humans: you said you don't have person_10/person_100 yet
-    // so for now use the same person image for all human counts
-    const human_img = human_img1;
+    const human_img = humanImgForCount(hN);
 
     // animals: use the new *_10 and *_100 images
     const species_img = speciesImgForCount(sp, sN);
