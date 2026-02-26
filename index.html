@@ -36,8 +36,8 @@
     show_progress_bar: true,
     auto_update_progress_bar: true,
     on_finish: function () {
-  jsPsych.data.displayData();
-}
+      jsPsych.data.displayData();
+    }
   });
 
   // create timeline
@@ -52,11 +52,11 @@
   const filename = `${file_id}.csv`;
   //also store the random id for convenience
   // also store participant-level info on EVERY row
-  
-jsPsych.data.addProperties({
-  random_id: random_id,
-  participant_id: random_id
-});
+
+  jsPsych.data.addProperties({
+    random_id: random_id,
+    participant_id: random_id
+  });
   //PLEASE KEEP FOR ALL FUTURE ITERATIONS
 
   // preload images
@@ -64,37 +64,37 @@ jsPsych.data.addProperties({
     type: jsPsychPreload,
     images: [
       'stimuli/bike.png',
-  'stimuli/boat.png',
-  'stimuli/cant decide.png',
-  'stimuli/pens.png',
-  'stimuli/person.png',
-  'stimuli/plate.png',
+      'stimuli/boat.png',
+      'stimuli/cant decide.png',
+      'stimuli/pens.png',
+      'stimuli/person.png',
+      'stimuli/plate.png',
 
-  // 1x animals
-  'stimuli/bunny.png',
-  'stimuli/cat.png',
-  'stimuli/clam.png',
-  'stimuli/dog.png',
-  'stimuli/pig.png',
-  'stimuli/pigeon.png',
+      // 1x animals
+      'stimuli/bunny.png',
+      'stimuli/cat.png',
+      'stimuli/clam.png',
+      'stimuli/dog.png',
+      'stimuli/pig.png',
+      'stimuli/pigeon.png',
 
-  // 10x animals
-  'stimuli/bunny_10.png',
-  'stimuli/cat_10.png',
-  'stimuli/clam_10.png',
-  'stimuli/dog_10.png',
-  'stimuli/pig_10.png',
-  'stimuli/pigeon_10.png',
-  'stimuli/person_10.png',
+      // 10x animals
+      'stimuli/bunny_10.png',
+      'stimuli/cat_10.png',
+      'stimuli/clam_10.png',
+      'stimuli/dog_10.png',
+      'stimuli/pig_10.png',
+      'stimuli/pigeon_10.png',
+      'stimuli/person_10.png',
 
-  // 100x animals
-  'stimuli/bunny_100.png',
-  'stimuli/cat_100.png',
-  'stimuli/clam_100.png',
-  'stimuli/dog_100.png',
-  'stimuli/pig_100.png',
-  'stimuli/pigeon_100.png',
-  'stimuli/person_100.png',
+      // 100x animals
+      'stimuli/bunny_100.png',
+      'stimuli/cat_100.png',
+      'stimuli/clam_100.png',
+      'stimuli/dog_100.png',
+      'stimuli/pig_100.png',
+      'stimuli/pigeon_100.png',
+      'stimuli/person_100.png',
     ]
   };
   timeline.push(preload);
@@ -105,6 +105,19 @@ jsPsych.data.addProperties({
     stimulus: "Welcome to the experiment. Press any key to begin."
   };
   timeline.push(welcome);
+
+  // create a short survey to collect a participant identifier
+  var participant_id_entry = {
+    type: jsPsychSurveyText,
+    questions: [{ prompt: "Please enter your participant ID:", name: "participant_id" }],
+    on_finish: function (data) {
+      console.log(data.response)
+      jsPsych.data.addProperties({
+        participant: data.response.participant_id
+      });
+    }
+  };
+  timeline.push(participant_id_entry);
 
   var enter_fullscreen = {
     type: jsPsychFullscreen,
@@ -117,7 +130,7 @@ jsPsych.data.addProperties({
     button_label: "Enter Full Screen"
   };
   timeline.push(enter_fullscreen);
-  
+
   // define conditions: "You" vs. "King Triton"
   let conditions = [
     {
@@ -130,11 +143,11 @@ jsPsych.data.addProperties({
     }
   ];
 
- let test_condition = conditions[Math.floor(Math.random() * conditions.length)];
+  let test_condition = conditions[Math.floor(Math.random() * conditions.length)];
   // add condition info after test_condition is defined
-jsPsych.data.addProperties({
-  condition_name: test_condition.name
-});
+  jsPsych.data.addProperties({
+    condition_name: test_condition.name
+  });
 
   // instructions for trials
   var instruction = {
@@ -145,87 +158,87 @@ jsPsych.data.addProperties({
 
   // define trials
   const species_list = [
-  { key: "dog",    singular: "dog",    plural: "dogs",    img1: "stimuli/dog.png",    img10: "stimuli/dog_10.png",    img100: "stimuli/dog_100.png" },
-  { key: "pig",    singular: "pig",    plural: "pigs",    img1: "stimuli/pig.png",    img10: "stimuli/pig_10.png",    img100: "stimuli/pig_100.png" },
-  { key: "cat",    singular: "cat",    plural: "cats",    img1: "stimuli/cat.png",    img10: "stimuli/cat_10.png",    img100: "stimuli/cat_100.png" },
-  { key: "bunny",  singular: "bunny",  plural: "bunnies", img1: "stimuli/bunny.png",  img10: "stimuli/bunny_10.png",  img100: "stimuli/bunny_100.png" },
-  { key: "clam",   singular: "clam",   plural: "clams",   img1: "stimuli/clam.png",   img10: "stimuli/clam_10.png",   img100: "stimuli/clam_100.png" },
-  { key: "pigeon", singular: "pigeon", plural: "pigeons", img1: "stimuli/pigeon.png", img10: "stimuli/pigeon_10.png", img100: "stimuli/pigeon_100.png" },
-];
+    { key: "dog", singular: "dog", plural: "dogs", img1: "stimuli/dog.png", img10: "stimuli/dog_10.png", img100: "stimuli/dog_100.png" },
+    { key: "pig", singular: "pig", plural: "pigs", img1: "stimuli/pig.png", img10: "stimuli/pig_10.png", img100: "stimuli/pig_100.png" },
+    { key: "cat", singular: "cat", plural: "cats", img1: "stimuli/cat.png", img10: "stimuli/cat_10.png", img100: "stimuli/cat_100.png" },
+    { key: "bunny", singular: "bunny", plural: "bunnies", img1: "stimuli/bunny.png", img10: "stimuli/bunny_10.png", img100: "stimuli/bunny_100.png" },
+    { key: "clam", singular: "clam", plural: "clams", img1: "stimuli/clam.png", img10: "stimuli/clam_10.png", img100: "stimuli/clam_100.png" },
+    { key: "pigeon", singular: "pigeon", plural: "pigeons", img1: "stimuli/pigeon.png", img10: "stimuli/pigeon_10.png", img100: "stimuli/pigeon_100.png" },
+  ];
 
-function speciesImgForCount(sp, n) {
-  if (n === 1) return sp.img1;
-  if (n === 10) return sp.img10;
-  if (n === 100) return sp.img100;
-  return sp.img1; // fallback safety
-}
-
-// Human image
-const human_img1 = "stimuli/person.png";
-const human_img10 = "stimuli/person_10.png";
-const human_img100 = "stimuli/person_100.png";
-  
-function humanImgForCount(n) {
-  if (n === 1) return human_img1;
-  if (n === 10) return human_img10;
-  if (n === 100) return human_img100;
-  return human_img1; // fallback
-}
-
-// Helper to make labels like "1 person" vs "10 people"
-function humanLabel(n) {
-  if (n === 1) return "1 person";
-  return `${n} people`;
-}
-
-// Helper to make labels like "1 dog" vs "10 dogs"
-function speciesLabel(n, sp) {
-  if (n === 1) return `1 ${sp.singular}`;
-  return `${n} ${sp.plural}`;
-}
-
-// The 7 required comparison types (human_count, species_count)
-const trial_pairs = [
-  [1,   1],
-  [1,  10],
-  [1, 100],
-  [10,  1],
-  [10,100],
-  [100, 1],
-  [100,10],
-];
-  
-// Build the actual jsPsych stimuli list
-var test_stimuli = [];
-
-for (const sp of species_list) {
-  for (const [hN, sN] of trial_pairs) {
-
-    const human_img = humanImgForCount(hN);
-
-    // animals: use the new *_10 and *_100 images
-    const species_img = speciesImgForCount(sp, sN);
-
-    test_stimuli.push({
-      choices: [
-        `<img src="${human_img}">`,
-        `<img src="stimuli/cant decide.png">`,
-        `<img src="${species_img}">`
-      ],
-      prompt: [
-        humanLabel(hN),
-        speciesLabel(sN, sp)
-      ],
-      meta: {
-        species_key: sp.key,
-        human_n: hN,
-        species_n: sN
-      }
-    });
+  function speciesImgForCount(sp, n) {
+    if (n === 1) return sp.img1;
+    if (n === 10) return sp.img10;
+    if (n === 100) return sp.img100;
+    return sp.img1; // fallback safety
   }
-}
 
-test_stimuli = jsPsych.randomization.shuffle(test_stimuli);
+  // Human image
+  const human_img1 = "stimuli/person.png";
+  const human_img10 = "stimuli/person_10.png";
+  const human_img100 = "stimuli/person_100.png";
+
+  function humanImgForCount(n) {
+    if (n === 1) return human_img1;
+    if (n === 10) return human_img10;
+    if (n === 100) return human_img100;
+    return human_img1; // fallback
+  }
+
+  // Helper to make labels like "1 person" vs "10 people"
+  function humanLabel(n) {
+    if (n === 1) return "1 person";
+    return `${n} people`;
+  }
+
+  // Helper to make labels like "1 dog" vs "10 dogs"
+  function speciesLabel(n, sp) {
+    if (n === 1) return `1 ${sp.singular}`;
+    return `${n} ${sp.plural}`;
+  }
+
+  // The 7 required comparison types (human_count, species_count)
+  const trial_pairs = [
+    [1, 1],
+    [1, 10],
+    [1, 100],
+    [10, 1],
+    [10, 100],
+    [100, 1],
+    [100, 10],
+  ];
+
+  // Build the actual jsPsych stimuli list
+  var test_stimuli = [];
+
+  for (const sp of species_list) {
+    for (const [hN, sN] of trial_pairs) {
+
+      const human_img = humanImgForCount(hN);
+
+      // animals: use the new *_10 and *_100 images
+      const species_img = speciesImgForCount(sp, sN);
+
+      test_stimuli.push({
+        choices: [
+          `<img src="${human_img}">`,
+          `<img src="stimuli/cant decide.png">`,
+          `<img src="${species_img}">`
+        ],
+        prompt: [
+          humanLabel(hN),
+          speciesLabel(sN, sp)
+        ],
+        meta: {
+          species_key: sp.key,
+          human_n: hN,
+          species_n: sN
+        }
+      });
+    }
+  }
+
+  test_stimuli = jsPsych.randomization.shuffle(test_stimuli);
 
 
   // Pre-test trial to introduce the boat scenario
@@ -257,145 +270,145 @@ test_stimuli = jsPsych.randomization.shuffle(test_stimuli);
 
     const A = current_trial.choices[0];
     const B = current_trial.choices[2];
-    const cantDecide = "Can't decide"; 
+    const cantDecide = "Can't decide";
 
     // randominzing withing subjects option order 
     const swap = Math.random() < 0.5;
 
-    const leftChoice  = swap ? B : A;
+    const leftChoice = swap ? B : A;
     const rightChoice = swap ? A : B;
 
     var test = {
       type: jsPsychHtmlButtonResponse,
       stimulus: `On one boat there is <b>${test_stimuli[i].prompt[0]}</b> and the other boat there is <b>${test_stimuli[i].prompt[1]}</b>.
                  Will <b>${test_condition.name}</b> save...`,
-        choices: [leftChoice, '<img src="stimuli/cant decide.png">', rightChoice],
-        prompt: `<p>${test_condition.name} can either save the <b>left</b> boat or the <b>right</b> boat. If it's too difficult to choose between
+      choices: [leftChoice, '<img src="stimuli/cant decide.png">', rightChoice],
+      prompt: `<p>${test_condition.name} can either save the <b>left</b> boat or the <b>right</b> boat. If it's too difficult to choose between
                     them, ${test_condition.name} can select 'Can't decide'.</p>`,
 
       data: {
-  phase: "main_choice",
+        phase: "main_choice",
 
-  // which trial in the loop
-  trial_number: i,
+        // which trial in the loop
+        trial_number: i,
 
-  species_key: current_trial.meta.species_key,
-  human_n: current_trial.meta.human_n,
-  species_n: current_trial.meta.species_n,
+        species_key: current_trial.meta.species_key,
+        human_n: current_trial.meta.human_n,
+        species_n: current_trial.meta.species_n,
 
-  // the two scenario labels (this is your "trial type" info)
-  optionA_label: current_trial.prompt[0],
-  optionB_label: current_trial.prompt[1],
+        // the two scenario labels (this is your "trial type" info)
+        optionA_label: current_trial.prompt[0],
+        optionB_label: current_trial.prompt[1],
 
-  // randomization info
-  swap: swap,
-  left_is: swap ? "B" : "A",
-  right_is: swap ? "A" : "B",
+        // randomization info
+        swap: swap,
+        left_is: swap ? "B" : "A",
+        right_is: swap ? "A" : "B",
 
-  // what the participant actually saw as labels (left/middle/right)
-  left_label:  swap ? current_trial.prompt[1] : current_trial.prompt[0],
-  middle_label: "Can't decide",
-  right_label: swap ? current_trial.prompt[0] : current_trial.prompt[1],
+        // what the participant actually saw as labels (left/middle/right)
+        left_label: swap ? current_trial.prompt[1] : current_trial.prompt[0],
+        middle_label: "Can't decide",
+        right_label: swap ? current_trial.prompt[0] : current_trial.prompt[1],
 
-  choice_options: [
-    (swap ? current_trial.prompt[1] : current_trial.prompt[0]),
-    "Can't decide",
-    (swap ? current_trial.prompt[0] : current_trial.prompt[1])
-  ],
+        choice_options: [
+          (swap ? current_trial.prompt[1] : current_trial.prompt[0]),
+          "Can't decide",
+          (swap ? current_trial.prompt[0] : current_trial.prompt[1])
+        ],
 
-  // simple analyzable code for the trial type
-  comparison_label: `${current_trial.prompt[0]} vs ${current_trial.prompt[1]}`
-},
+        // simple analyzable code for the trial type
+        comparison_label: `${current_trial.prompt[0]} vs ${current_trial.prompt[1]}`
+      },
 
-on_finish: function(data) {
-  // Convert response index -> chosen option label
-  // response: 0 = left, 1 = can't decide, 2 = right
-  if (data.response === 0) data.chosen_option = data.left_label;
-  if (data.response === 1) data.chosen_option = "Can't decide";
-  if (data.response === 2) data.chosen_option = data.right_label;
+      on_finish: function (data) {
+        // Convert response index -> chosen option label
+        // response: 0 = left, 1 = can't decide, 2 = right
+        if (data.response === 0) data.chosen_option = data.left_label;
+        if (data.response === 1) data.chosen_option = "Can't decide";
+        if (data.response === 2) data.chosen_option = data.right_label;
 
-  // Characterize the choice (human/animal/object/neutral) based on text labels
-  const chosen = (data.chosen_option || "").toLowerCase();
+        // Characterize the choice (human/animal/object/neutral) based on text labels
+        const chosen = (data.chosen_option || "").toLowerCase();
 
-  data.choice_kind = "neutral";
-  data.saved_human = 0;
-  data.saved_animal = 0;
+        data.choice_kind = "neutral";
+        data.saved_human = 0;
+        data.saved_animal = 0;
 
-  if (chosen.includes("person") || chosen.includes("people")) {
-    data.choice_kind = "human";
-    data.saved_human = 1;
+        if (chosen.includes("person") || chosen.includes("people")) {
+          data.choice_kind = "human";
+          data.saved_human = 1;
 
-  } else if (
-    chosen.includes("dog") ||
-    chosen.includes("pig") ||
-    chosen.includes("cat") ||
-    chosen.includes("bunny") ||
-    chosen.includes("bunnies") ||
-    chosen.includes("clam") ||
-    chosen.includes("pigeon")
-  ) {
-    data.choice_kind = "animal";
-    data.saved_animal = 1;
+        } else if (
+          chosen.includes("dog") ||
+          chosen.includes("pig") ||
+          chosen.includes("cat") ||
+          chosen.includes("bunny") ||
+          chosen.includes("bunnies") ||
+          chosen.includes("clam") ||
+          chosen.includes("pigeon")
+        ) {
+          data.choice_kind = "animal";
+          data.saved_animal = 1;
 
-  } else if (chosen.includes("bike") || chosen.includes("plate")) {
-    data.choice_kind = "object";
-  }
-data.human_chosen = (data.choice_kind === "human") ? 1 : 0;
-}
-};
+        } else if (chosen.includes("bike") || chosen.includes("plate")) {
+          data.choice_kind = "object";
+        }
+        data.human_chosen = (data.choice_kind === "human") ? 1 : 0;
+      }
+    };
 
     timeline.push(test);
 
-  var iti = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<div style="font-size:40px; opacity:0.6;">+</div>',
-    choices: "NO_KEYS",
-    trial_duration: 500,
-    data: { task: "iti" }
-  };    
-  timeline.push(iti);
+    var iti = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<div style="font-size:40px; opacity:0.6;">+</div>',
+      choices: "NO_KEYS",
+      trial_duration: 500,
+      data: { task: "iti" }
+    };
+    timeline.push(iti);
   }
 
   const capacity_labels = ["Not at all", "A little bit", "A medium amount", "A lot"];
 
-// 1) Smartness
-var capacity_smart = {
-  type: jsPsychSurveyLikert,
-  preamble: "<p><b>Capacities</b></p><p>How smart do you think the following types of beings are?</p>",
-  questions: [
-    { prompt: "Person", labels: capacity_labels, required: true, name: "smart_person" },
-    { prompt: "Dog",    labels: capacity_labels, required: true, name: "smart_dog" },
-    { prompt: "Pig",    labels: capacity_labels, required: true, name: "smart_pig" }
-  ],
-  data: { task: "capacity_smart" }
-};
-timeline.push(capacity_smart);
+  // 1) Smartness
+  var capacity_smart = {
+    type: jsPsychSurveyLikert,
+    preamble: "<p><b>Capacities</b></p><p>How smart do you think the following types of beings are?</p>",
+    questions: [
+      { prompt: "Person", labels: capacity_labels, required: true, name: "smart_person" },
+      { prompt: "Dog", labels: capacity_labels, required: true, name: "smart_dog" },
+      { prompt: "Pig", labels: capacity_labels, required: true, name: "smart_pig" }
+    ],
+    data: { task: "capacity_smart" }
+  };
+  timeline.push(capacity_smart);
 
-// 2) Physical pain
-var capacity_pain = {
-  type: jsPsychSurveyLikert,
-  preamble: "<p>To what extent do you think the following types of beings can feel <b>physical pain</b>?</p>",
-  questions: [
-    { prompt: "Person", labels: capacity_labels, required: true, name: "pain_person" },
-    { prompt: "Dog",    labels: capacity_labels, required: true, name: "pain_dog" },
-    { prompt: "Pig",    labels: capacity_labels, required: true, name: "pain_pig" }
-  ],
-  data: { task: "capacity_pain" }
-};
-timeline.push(capacity_pain);
+  // 2) Physical pain
+  var capacity_pain = {
+    type: jsPsychSurveyLikert,
+    preamble: "<p>To what extent do you think the following types of beings can feel <b>physical pain</b>?</p>",
+    questions: [
+      { prompt: "Person", labels: capacity_labels, required: true, name: "pain_person" },
+      { prompt: "Dog", labels: capacity_labels, required: true, name: "pain_dog" },
+      { prompt: "Pig", labels: capacity_labels, required: true, name: "pain_pig" }
+    ],
+    data: { task: "capacity_pain" }
+  };
+  timeline.push(capacity_pain);
 
-// 3) Sadness/anxiety
-var capacity_emotion = {
-  type: jsPsychSurveyLikert,
-  preamble: "<p>To what extent do you think the following types of beings can feel <b>sadness or anxiety</b>?</p>",
-  questions: [
-    { prompt: "Person", labels: capacity_labels, required: true, name: "emotion_person" },
-    { prompt: "Dog",    labels: capacity_labels, required: true, name: "emotion_dog" },
-    { prompt: "Pig",    labels: capacity_labels, required: true, name: "emotion_pig" }
-  ],
-  data: { task: "capacity_emotion" }
-};
-timeline.push(capacity_emotion);
+  // 3) Sadness/anxiety
+  var capacity_emotion = {
+    type: jsPsychSurveyLikert,
+    preamble: "<p>To what extent do you think the following types of beings can feel <b>sadness or anxiety</b>?</p>",
+    questions: [
+      { prompt: "Person", labels: capacity_labels, required: true, name: "emotion_person" },
+      { prompt: "Dog", labels: capacity_labels, required: true, name: "emotion_dog" },
+      { prompt: "Pig", labels: capacity_labels, required: true, name: "emotion_pig" }
+    ],
+    data: { task: "capacity_emotion" }
+  };
+  timeline.push(capacity_emotion);
 
   var hypothesis_check = {
     type: jsPsychSurveyText,
