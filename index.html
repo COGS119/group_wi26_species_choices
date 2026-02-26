@@ -36,7 +36,7 @@
     show_progress_bar: true,
     auto_update_progress_bar: true,
     on_finish: function () {
-  jsPsych.data.displayData();
+  jsPsych.data.get().localSave("csv", "DEBUG_species_choices.csv");
 }
   });
 
@@ -304,7 +304,7 @@ test_stimuli = jsPsych.randomization.shuffle(test_stimuli);
   ],
 
   // simple analyzable code for the trial type
-  trial_type: `${current_trial.prompt[0]}_vs_${current_trial.prompt[1]}`
+  comparison_label: `${current_trial.prompt[0]} vs ${current_trial.prompt[1]}`
 },
 
 on_finish: function(data) {
@@ -340,6 +340,7 @@ on_finish: function(data) {
   } else if (chosen.includes("bike") || chosen.includes("plate")) {
     data.choice_kind = "object";
   }
+data.human_chosen = (data.choice_kind === "human") ? 1 : 0;
 }
 };
 
