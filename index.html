@@ -36,8 +36,8 @@
     show_progress_bar: true,
     auto_update_progress_bar: true,
     on_finish: function () {
-      jsPsych.data.displayData();
-    }
+  jsPsych.data.get().localSave("csv", "DEBUG_species_choices.csv");
+}
   });
 
   // create timeline
