@@ -25,75 +25,71 @@ counts_by_random_id <- exp_data %>%
 #output to track participants
 write_csv(counts_by_random_id,here(processed_data_directory,paste0(file_name,"-participant-list.csv")))
 
-#extract reward question
-free_recall <- exp_data %>% 
-  filter(trial_index %in% seq(4,16)) %>%
-  #fill in stimulus list
-  fill(stimulus,.direction="down") %>%
-  filter(trial_type =="survey-text") %>%
-  rename(stimulus_list = stimulus) %>%
+#extract questions
+capacity_smart <- exp_data %>% 
+  filter(task == "capacity_smart") %>%
   mutate(json = map(response, ~ fromJSON(.) %>% as.data.frame())) %>% 
   unnest(json) %>%
-  rename(
-    word_1 = Q0,
-    word_2 = Q1,
-    word_3 = Q2,
-    word_4 = Q3,
-    word_5 = Q4,
-    word_6 = Q5,
-    word_7 = Q6,
-    word_8 = Q7,
-    word_9 = Q8,
-    word_10 = Q9,
-    word_11 = Q10,
-    word_12 = Q11,
-    word_13 = Q12,
-    word_14 = Q13,
-    word_15 = Q14
-  )
+  select(random_id,smart_person:smart_pig)
+
+capacity_pain <- exp_data %>% 
+  filter(task == "capacity_pain") %>%
+  mutate(json = map(response, ~ fromJSON(.) %>% as.data.frame())) %>% 
+  unnest(json) %>%
+  select(random_id,pain_person:pain_pig)
+
+capacity_emotion <- exp_data %>% 
+  filter(task == "capacity_emotion") %>%
+  mutate(json = map(response, ~ fromJSON(.) %>% as.data.frame())) %>% 
+  unnest(json) %>%
+  select(random_id,emotion_person:emotion_pig)
+
+hypothesis_check <- exp_data %>% 
+  filter(task == "hypothesis_check") %>%
+  mutate(json = map(response, ~ fromJSON(.) %>% as.data.frame())) %>% 
+  unnest(json) %>%
+  rename(hypothesis_check=Q0) %>%
+  select(random_id,hypothesis_check)
+
+difficulty_rating <- exp_data %>% 
+  filter(task == "difficulty_rating") %>%
+  mutate(json = map(response, ~ fromJSON(.) %>% as.data.frame())) %>% 
+  unnest(json) %>%
+  rename(difficulty_rating=Q0) %>%
+  select(random_id,difficulty_rating)
+
+technical_check <- exp_data %>% 
+  filter(task == "technical_check") %>%
+  mutate(json = map(response, ~ fromJSON(.) %>% as.data.frame())) %>% 
+  unnest(json) %>%
+  rename(technical_check =Q0) %>%
+  select(random_id,technical_check )
+
+demographics <- exp_data %>% 
+  filter(task == "demographics") %>%
+  mutate(json = map(response, ~ fromJSON(.) %>% as.data.frame())) %>% 
+  unnest(json) %>%
+  select(random_id,age_bracket:diet)
 
 #join back in
 exp_data <- exp_data %>%
-  left_join(free_recall)
-
-#extract likert responses
-recognition_trials <- exp_data %>%
-  filter(task=="recognition") %>%
-  mutate(json = map(response, ~ fromJSON(.) %>% as.data.frame())) %>%
-  unnest(json) %>%
-  rename(likert_rating = Q0)
-
-#join into exp_data
-exp_data <- exp_data %>%
-  left_join(recognition_trials)
-
-#extract final questionnaire responses
-questionnaire_responses <- exp_data %>% 
-  filter(trial_index ==100) %>%
-  mutate(json = map(response, ~ fromJSON(.) %>% as.data.frame())) %>% 
-  unnest(json) %>%
-  rename(
-    experiment_about = Q0,
-    feel_while_completing = Q1,
-    subjective_task_difficulty = Q2,
-    technical_issues = Q3,
-    feedback = Q4
-  ) %>%
-  select(random_id,experiment_about,feel_while_completing,subjective_task_difficulty,technical_issues,feedback)
-
-#join into exp_data
-exp_data <- exp_data %>%
-  left_join(questionnaire_responses)
+  left_join(capacity_smart) %>%
+  left_join(capacity_pain) %>%
+  left_join(capacity_emotion) %>%
+  left_join(hypothesis_check) %>%
+  left_join(difficulty_rating) %>%
+  left_join(demographics)
+  
 
 #filter dataset
 exp_data <- exp_data %>%
-  filter(!is.na(task))
+  filter(!is.na(phase))
 
 #filter participant ids
 filter_ids <- c()
 
 #identify participants from the experiment group
-group_members <- c("fawn","dolphin","deer","panda","butterfly","sloth")
+group_members <- c("frog","goat","rabbit","parrot","giraffe","duck")
 
 processed_data <- exp_data %>%
   filter(!(participant_id %in% filter_ids)) %>%
